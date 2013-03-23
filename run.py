@@ -20,47 +20,56 @@ class WebApp():
 
 	def __init__(self):
 		self.page_runners = {}
-		pages = []
-		for item in self.controller.alias:
-			for type_of_method in item['type']:
-				if not type_of_method in self.page_runners:
-					self.page_runners.update({type_of_method:[item]})
+
+		for module_name in self.controller.controllers:
+
+			for type_name in self.controller.controllers[module_name].pages['type']:
+				new_runner = {
+					'class': self.controller.controllers[module_name],
+				    'urls': self.controller.controllers[module_name].pages['urls'],
+				    'name': module_name
+				}
+
+				if type_name in self.page_runners:
+					self.append = self.page_runners[type_name].append(new_runner)
 				else:
-					self.page_runners[type_of_method].append(item)
+					self.page_runners.update({type_name: [new_runner]})
 
-		for runner in self.page_runners:
-			if 'default' in self.page_runners[runner][0]['type']:
-				pages += self.page_runners[runner][0]['urls']
+		for thing in self.page_runners:
+			print thing, self.page_runners[thing]
+
+	def __load(self, page, args, params = {}):
+
+		for variant in self.page_runners[page]:
+
+			if len(args):
+				page_name = args.pop(0)
 			else:
-				pages += self.page_runners[runner][0]['type']
+				page_name = '__default__'
 
-		for item in pages:
-			self.pages.add(item)
-
-	def __load(self, func_name, page, params):
-		for variant in self.page_runners[func_name]:
-			if page in variant['urls']:
-				return self.controller.controllers[variant['name']].printPage(page, {}, params)
+			return self.controller.controllers[variant['name']].printPage(page_name, args, params)
 
 		return builder.throwWebError(params=params)
 
-	def index(self, **params):
-		return self.__load(inspect.stack()[0][3],'index', params)
+	def index(self, *args, **kwargs):
+		return self.__load('index', {})
 
-	def default(self, page, **params):
-		if page in self.pages:
-			return self.__load(inspect.stack()[0][3], page, params)
+	def default(self, page, *args, **kwargs):
+		args = list(args)
+		if not page in self.page_runners:
+			args.insert(0, page)
+			page = 'index'
+
+		return self.__load(page, args, {})
 
 	index.exposed = True
 	default.exposed = True
 
-root = WebApp()
-
 if __name__ == '__main__':
 
-	print '# ----------------------------------------- #'
-	print '#  Site version:', core.__version__, 'build:', core.__build__
-	print '# ----------------------------------------- #'
+	print '# ------------------------------------------------------------- #'
+	print '#  ', core.__appname__,'version:', core.__version__, 'revision:', core.__revision__
+	print '# ------------------------------------------------------------- #'
 
 	builder = site_builder.builder(core)
 	cherrypy.quickstart(WebApp(), config=core.conf_name)

@@ -41,7 +41,7 @@ class builder():
 				'current_page': filename,
 				'version': self.core_settings.__version__,
 				'address': cherrypy.request.path_info[1:],
-				'build': self.core_settings.__build__,
+				'build': self.core_settings.__revision__,
 				'conf_name': self.core_settings.loaded_data['conf_name']
 			})
 

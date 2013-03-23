@@ -123,7 +123,15 @@ class defaultController(defaultClass):
 
 	def printPage(self, page, methods, params = {}):
 
-		def runRule(rule):
+		def runRule(urls, name):
+
+			if name in urls:
+				rule = urls[name]
+			elif name == '__default__':
+				rule = 'printDefault'
+			else:
+				return 'error! page rule not found'
+
 			if isinstance(rule, dict):
 				params.update(rule['params'])
 				if rule['method']:
@@ -133,7 +141,9 @@ class defaultController(defaultClass):
 			else:
 				return getattr(self, rule)({'fields': fields, 'params': params})
 
+
 		fields = {}
+
 
 		params.update({'__page__': page, '__query__': cherrypy.request.query_string})
 
@@ -160,12 +170,10 @@ class defaultController(defaultClass):
 			return res
 
 		# print page
-		for page_name in self.pages:
-			if page_name == page:
-				return runRule(self.pages[page_name])
+		return runRule(self.pages['urls'], page)
 
-		if '__default__' in self.pages:
-			return runRule(self.pages['__default__'])
+	def printDefault(self, data):
+		return self.printTemplate(self.core.SERVICE_TEMPLATES['default'], data)
 
 	def isAjax(self):
 		return 'X-Requested-With' in cherrypy.request.headers and cherrypy.request.headers['X-Requested-With'] == 'XMLHttpRequest'

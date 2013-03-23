@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 import __init__
-import os, inspect
+import os, inspect, sys
 
 class controllersLoader():
 
@@ -14,17 +14,22 @@ class controllersLoader():
 
 		self.modules = {}
 		for item in os.listdir(modules_folder):
-			if item[-2:] == 'py':
+			if item[-2:] == 'py' and item[:-3:] != 'basic':
 				self.modules.update({item[:-3:]:__import__(item[:-3:])})
 
 	def __getAlias(self):
-		self.alias = []
 		self.controllers = {}
+
 		for item in self.modules:
 			try:
-				self.controllers.update({item: self.modules[item].data['class']()})
-				self.modules[item].data.update({'name': item})
-				self.alias.append(self.modules[item].data)
+				for name, class_name in inspect.getmembers(sys.modules[item]):
+					if inspect.isclass(class_name):
+						controller = class_name()
+						if controller.pages['type'] != controller.pages['urls']:
+							pass
+
+						self.controllers.update({item: controller})
+
 			except Exception:
 				print 'WARNING:', item, 'module loading FAIL!'
 

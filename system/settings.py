@@ -15,9 +15,9 @@ class CoreConfigParser():
 	def __init__(self):
 
 		try:
-			print '> Loading', sys.argv[1], 'config for Twitter'
+			print '> Loading', sys.argv[1], 'config'
 		except Exception:
-			print '> Loading default config for Twitter'
+			print '> Loading default config'
 			try:
 				sys.argv[1] = 'default'
 			except Exception:
@@ -50,11 +50,18 @@ class CoreConfigParser():
 
 class core():
 
-	__version__ = u"1.0"
+	__appname__ = u'Auchenflower'
+	__version__ = u'0.04'
+
+	TEMPLATES_FOLDER = './templates/'
+
+	SERVICE_TEMPLATES_DIR = './service/'
+	SERVICE_TEMPLATES = {
+		'default': SERVICE_TEMPLATES_DIR+'default'
+	}
 
 	APP_DIR = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/../'
 
-	TEMPLATES_FOLDER = './templates/'
 
 	def __init__(self):
 		config_loader = CoreConfigParser()
@@ -71,6 +78,5 @@ class core():
 	def getBuildInfo(self):
 		result = os.popen('git log | grep "^commit" | wc -l')
 		lines = result.readlines()
-
-		self.__build__ = int(lines[0])
+		self.__revision__ = int(lines[0])
 

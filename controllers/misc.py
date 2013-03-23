@@ -5,21 +5,21 @@ import basic
 class miscController(basic.defaultController):
 
 	pages = {
-		'index':    'printIndex',
-		'':         'printIndex'
-	}
+				'type': ['index'],
+				'urls': {
+					'index': 'printIndex',
+					'test1': 'printTest1',
+				}
+			}
 
 
 	# --------------------------------------------------------------------------------------------------
 	# Print pages
 
-	def printIndex(self, data):
+	def printDefault(self, data):
 		data['fields'].update({'test': 1})
 		return basic.defaultController.printTemplate(self, 'index', data)
 
-
-data = {
-	'class': miscController,
-    'type': ['index', 'default'],
-	'urls': ['', 'index']
-}
+	def printTest1(self, data):
+		data['fields'].update({'test': 2})
+		return basic.defaultController.printTemplate(self, 'test1', data)
