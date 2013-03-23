@@ -1,0 +1,26 @@
+
+/* Fonts */
+
+@mixin fontload($family, $name, $filename, $svgname) {
+  font-family: $family;
+  src: url('#{$filename}.eot');
+  src: local($name),
+  url('#{$filename}.eot?#iefix') format('embedded-opentype'),
+  url('#{$filename}.woff') format('woff'),
+  url('#{$filename}.ttf') format('truetype'),
+  url('#{$filename}.svg##{$svgname}') format('svg');
+}
+
+/* For example load PT Serif
+
+@font-face {
+  @include fontload('PT Serif', 'PT Serif', 'fonts/ptf55f_w', 'PTSerif-Regular');
+}
+
+@font-face {
+  @include fontload('PT Serif', 'PT Serif Bold', 'fonts/ptf75f_w', 'PTSerif-Bold');
+  font-style: normal;
+  font-weight: bold;
+}
+
+*/
