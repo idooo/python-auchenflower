@@ -4,7 +4,7 @@ import __init__
 import cherrypy
 import __main__
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, exceptions
 
 class builder():
 
@@ -31,6 +31,13 @@ class builder():
 
 		return self.loadTemplate('error.jinja2', fields)
 
+	def throwFrameworkError(self, name, context = {}):
+		data = {'fields': {
+			'error_name': name,
+		    'context': context
+		}}
+		return self.loadTemplate(self.core_settings.SERVICE_TEMPLATES['framework_error']+'.jinja2', data)
+
 	def httpRedirect(self, url):
 		raise cherrypy.HTTPRedirect(url)
 
@@ -47,8 +54,16 @@ class builder():
 
 		data['fields'].update(self.base_fields)
 
-		template = self.env.get_template(filename)
+		try:
+			template = self.env.get_template(filename)
+		except exceptions.TemplateNotFound, e:
+			return self.throwFrameworkError('template not found', {'template name': str(e)})
 
 		text = template.render(data['fields'])
+
+		print data
+		if self.core_settings.DEBUG:
+			template = self.env.get_template(self.core_settings.SERVICE_TEMPLATES['debug']+'.jinja2')
+			text += template.render(data)
 
 		return text

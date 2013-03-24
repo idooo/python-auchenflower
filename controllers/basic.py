@@ -130,7 +130,13 @@ class defaultController(defaultClass):
 			elif name == '__default__':
 				rule = 'printDefault'
 			else:
-				return 'error! page rule not found'
+				return self.sbuilder.throwFrameworkError(
+					name='page rule not found',
+					context={
+						'page rule': name,
+						'allowed': urls.keys()
+					}
+				)
 
 			if isinstance(rule, dict):
 				params.update(rule['params'])
@@ -139,11 +145,19 @@ class defaultController(defaultClass):
 				else:
 					methods(params)
 			else:
-				return getattr(self, rule)({'fields': fields, 'params': params})
 
+				if hasattr(self, rule):
+					return getattr(self, rule)({'fields': fields, 'params': params})
+				else:
+					return self.sbuilder.throwFrameworkError(
+						name='response method not defined',
+						context={
+							'class': str(self.__class__),
+							'method name': rule
+						}
+					)
 
 		fields = {}
-
 
 		params.update({'__page__': page, '__query__': cherrypy.request.query_string})
 

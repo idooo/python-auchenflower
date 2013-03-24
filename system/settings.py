@@ -15,9 +15,9 @@ class CoreConfigParser():
 	def __init__(self):
 
 		try:
-			print '> Loading', sys.argv[1], 'config'
+			print '\n> Loading', sys.argv[1], 'config'
 		except Exception:
-			print '> Loading default config'
+			print '\n> Loading default config'
 			try:
 				sys.argv[1] = 'default'
 			except Exception:
@@ -53,11 +53,15 @@ class core():
 	__appname__ = u'Auchenflower'
 	__version__ = u'0.04'
 
+	DEBUG = True
+
 	TEMPLATES_FOLDER = './templates/'
 
 	SERVICE_TEMPLATES_DIR = './service/'
 	SERVICE_TEMPLATES = {
-		'default': SERVICE_TEMPLATES_DIR+'default'
+		'default': SERVICE_TEMPLATES_DIR+'default',
+	    'framework_error': SERVICE_TEMPLATES_DIR+'framework_error',
+	    'debug': SERVICE_TEMPLATES_DIR+'debug'
 	}
 
 	APP_DIR = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/../'

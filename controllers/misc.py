@@ -7,19 +7,17 @@ class miscController(basic.defaultController):
 	pages = {
 				'type': ['index'],
 				'urls': {
-					'index': 'printIndex',
 					'test1': 'printTest1',
 				}
 			}
-
 
 	# --------------------------------------------------------------------------------------------------
 	# Print pages
 
 	def printDefault(self, data):
-		data['fields'].update({'test': 1})
-		return basic.defaultController.printTemplate(self, 'index', data)
+		data['fields'].update({'page_name': 'index'})
+		return basic.defaultController.printTemplate(self, 'test', data)
 
 	def printTest1(self, data):
-		data['fields'].update({'test': 2})
+		data['fields'].update({'page_name': 'misc -> test1'})
 		return basic.defaultController.printTemplate(self, 'test1', data)

@@ -35,9 +35,6 @@ class WebApp():
 				else:
 					self.page_runners.update({type_name: [new_runner]})
 
-		for thing in self.page_runners:
-			print thing, self.page_runners[thing]
-
 	def __load(self, page, args, params = {}):
 
 		for variant in self.page_runners[page]:
@@ -52,7 +49,7 @@ class WebApp():
 		return builder.throwWebError(params=params)
 
 	def index(self, *args, **kwargs):
-		return self.__load('index', {})
+		return self.__load('index', list(args), kwargs)
 
 	def default(self, page, *args, **kwargs):
 		args = list(args)
@@ -60,7 +57,7 @@ class WebApp():
 			args.insert(0, page)
 			page = 'index'
 
-		return self.__load(page, args, {})
+		return self.__load(page, args, kwargs)
 
 	index.exposed = True
 	default.exposed = True
