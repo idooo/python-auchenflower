@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import basic
-from time import time
 
-class miscController(basic.defaultController):
+class exmapleController(basic.defaultController):
 
 	pages = {
-		'type': ['u', 'u2'],
+		'type': ['example'],
 		'urls': {
-			'error_1': '_/_', # method not defined
-			'error_2': 'printTestError2', # template not found
-		    'normal': 'printNormal'
+			'about': 'printAbout',
+			'messages': 'printMessages'
 		}
 	}
 

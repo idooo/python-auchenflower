@@ -16,8 +16,8 @@ class miscController(basic.defaultController):
 
 	def printDefault(self, data):
 		data['fields'].update({'page_name': 'index'})
-		return basic.defaultController.printTemplate(self, 'test', data)
+		return self.printTemplate('test', data)
 
 	def printTest1(self, data):
 		data['fields'].update({'page_name': 'misc -> test1'})
-		return basic.defaultController.printTemplate(self, 'test1', data)
+		return self.printTemplate('test1', data)

@@ -61,8 +61,7 @@ class builder():
 
 		text = template.render(data['fields'])
 
-		print data
-		if self.core_settings.DEBUG:
+		if self.core_settings.loaded_data['debug']['web_debug']:
 			template = self.env.get_template(self.core_settings.SERVICE_TEMPLATES['debug']+'.jinja2')
 			text += template.render(data)
 

@@ -10,7 +10,9 @@ import ConfigParser
 
 class CoreConfigParser():
 
-	debug_var_names =  []
+	debug_var_names =  [
+		'web_debug'
+	]
 
 	def __init__(self):
 
@@ -33,6 +35,9 @@ class CoreConfigParser():
 		return datastr[1:len(datastr)-1]
 
 	def readData(self):
+
+		fields = {}
+
 		try:
 			site_address = self.prettyStr(self.config.get('global','site.host'))
 
@@ -46,14 +51,23 @@ class CoreConfigParser():
 			print str(e)
 			exit()
 
+		debug_vars = {}
+		for param in self.debug_var_names:
+			try:
+				buff = self.config.get('debug', param)
+			except Exception:
+				buff = False
+
+			debug_vars.update({param: buff})
+
+		fields.update({'debug': debug_vars})
+
 		return fields
 
 class core():
 
 	__appname__ = u'Auchenflower'
 	__version__ = u'0.04'
-
-	DEBUG = True
 
 	TEMPLATES_FOLDER = './templates/'
 
@@ -65,7 +79,6 @@ class core():
 	}
 
 	APP_DIR = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/../'
-
 
 	def __init__(self):
 		config_loader = CoreConfigParser()

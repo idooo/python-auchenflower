@@ -1,20 +1,20 @@
 [global]
-environment: 'production'
 log.error_file: './logs/web.log'
-log.screen: False
+log.screen: True
 server.socket_host = "127.0.0.1"
-server.socket_port = 8082
-site.host = "127.0.0.1:8082"
-server.thread_pool = 16
-request_queue_size = 500
+server.socket_port = 8085
+site.host = "127.0.0.1:8085"
+checker.on = True
+tools.log_headers.on = True
+request.show_tracebacks = True
+request.show_mismatched_params = True
+
+[debug]
+web_debug = True
 
 [/]
-tools.staticdir.root = "/var/www/home/"
+tools.staticdir.root = "/Users/ido/github/Auchenflower"
 tools.encode.encoding = 'utf8'
-
-[/favicon.ico]
-tools.staticfile.on = True
-tools.staticfile.filename = "/var/www/home/templates/css/favicon.ico"
 
 [/css]
 tools.staticdir.on = True

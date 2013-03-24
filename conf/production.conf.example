@@ -1,0 +1,31 @@
+[global]
+log.error_file: './logs/web.log'
+log.screen: False
+server.socket_host = "127.0.0.1"
+server.socket_port = 8080
+site.host = "127.0.0.1:8085"
+server.thread_pool = 16
+checker.on = True
+request_queue_size = 500
+tools.log_headers.on = False
+request.show_tracebacks = False
+request.show_mismatched_params = False
+
+[debug]
+# web_debug = True
+
+[/]
+tools.staticdir.root = "/var/www/project"
+tools.encode.encoding = 'utf8'
+
+[/css]
+tools.staticdir.on = True
+tools.staticdir.dir = "./templates/css/"
+
+[/images]
+tools.staticdir.on = True
+tools.staticdir.dir = "./templates/images/"
+
+[/js]
+tools.staticdir.on = True
+tools.staticdir.dir = "./templates/js/"
