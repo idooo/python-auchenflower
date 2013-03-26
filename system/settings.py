@@ -129,7 +129,7 @@ class core():
 
 	def __databaseLoad(self, connector_name):
 
-		database_folder = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/database'
+		database_folder = self.APP_DIR+'/system/database'
 
 		self.database_connector = False
 		for item in os.listdir(database_folder):

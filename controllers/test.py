@@ -22,7 +22,10 @@ class miscController(basic_controller.defaultController):
 		'string' : {
 			'ya': 'getTestString1',
 	        'no': 'getTestString2'
-		}
+		},
+
+	    # @TODO only for /u/normal page method run by 'define'
+	    'normal?define': 'test'
 	}
 
 
