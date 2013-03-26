@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import __init__
-import cherrypy
 import __main__
+import cherrypy
 
 from jinja2 import Environment, FileSystemLoader, exceptions
 
@@ -14,12 +14,10 @@ class builder():
 	)
 
 	def __init__(self, core = None):
-
-		if not core:
-			core = __main__.core
-
-		self.core_settings = core
-		self.base_fields = self.core_settings.base_fields
+		try:
+			self.core
+		except:
+			self.core = __main__.core
 
 	def throwWebError(self, error_code = 404, params = {}):
 
@@ -36,7 +34,7 @@ class builder():
 			'error_name': name,
 		    'context': context
 		}}
-		return self.loadTemplate(self.core_settings.SERVICE_TEMPLATES['framework_error']+'.jinja2', data)
+		return self.loadTemplate(self.core.SERVICE_TEMPLATES['framework_error']+'.jinja2', data)
 
 	def httpRedirect(self, url):
 		raise cherrypy.HTTPRedirect(url)
@@ -46,13 +44,13 @@ class builder():
 		if not 'current_page' in data['fields']:
 			data['fields'].update({
 				'current_page': filename,
-				'version': self.core_settings.__version__,
+				'version': self.core.__version__,
 				'address': cherrypy.request.path_info[1:],
-				'build': self.core_settings.__revision__,
-				'conf_name': self.core_settings.loaded_data['conf_name']
+				'build': self.core.__revision__,
+				'conf_name': self.core.conf['conf_name']
 			})
 
-		data['fields'].update(self.base_fields)
+		data['fields'].update(self.core.base_fields)
 
 		try:
 			template = self.env.get_template(filename)
@@ -61,8 +59,12 @@ class builder():
 
 		text = template.render(data['fields'])
 
-		if self.core_settings.loaded_data['debug']['web_debug']:
-			template = self.env.get_template(self.core_settings.SERVICE_TEMPLATES['debug']+'.jinja2')
+		if self.core.conf['debug']['web_debug']:
+			template = self.env.get_template(self.core.SERVICE_TEMPLATES['debug']+'.jinja2')
 			text += template.render(data)
+
+		if self.core.conf['debug']['model_debug']:
+			template = self.env.get_template(self.core.SERVICE_TEMPLATES['debug_model']+'.jinja2')
+			text += template.render({'__debug_model': self.core.model})
 
 		return text

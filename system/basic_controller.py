@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import __init__
-import settings
+import __main__
 import site_builder
 from simplejson import dumps as toJSON
 import cherrypy
-import __main__
 
 class defaultClass:
 

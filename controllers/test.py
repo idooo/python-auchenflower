@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import basic
+import basic_controller
 from time import time
 
-class miscController(basic.defaultController):
+class miscController(basic_controller.defaultController):
 
 	pages = {
 		'type': ['u', 'u2'],
 		'urls': {
 			'error_1': '_/_', # method not defined
 			'error_2': 'printTestError2', # template not found
-		    'normal': 'printNormal'
+		    'normal': 'printNormal',
+		    'model': 'printModelData',
+		    'items': 'printDatabase',
 		}
 	}
 
@@ -54,4 +56,12 @@ class miscController(basic.defaultController):
 
 	def printNormal(self, data):
 		data['fields'].update({'page_name': 'u -> normal'})
+		return self.printTemplate('test', data)
+
+	def printModelData(self, data):
+		data['fields'].update({'page_name': self.core.model['test']['People'].getPeople()})
+		return self.printTemplate('test', data)
+
+	def printDatabase(self, data):
+		data['fields'].update({'page_name': self.core.model['test']['Items'].getItems()})
 		return self.printTemplate('test', data)

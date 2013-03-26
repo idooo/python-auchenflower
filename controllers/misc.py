@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import basic
+import basic_controller
 
-class miscController(basic.defaultController):
+class miscController(basic_controller.defaultController):
 
 	pages = {
 				'type': ['index'],
