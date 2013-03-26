@@ -63,8 +63,12 @@ class WebApp():
 
 if __name__ == '__main__':
 
+	welcome_string = '#  ' + core.__appname__ + ', version: ' + str(core.__version__)
+	if core.__revision__:
+		welcome_string += ', revision: '+ str(core.__revision__)
+
 	print '# ------------------------------------------------------------- #'
-	print '#  ', core.__appname__,'version:', core.__version__, 'revision:', core.__revision__
+	print welcome_string
 	print '# ------------------------------------------------------------- #'
 
 	builder = site_builder.builder(core)

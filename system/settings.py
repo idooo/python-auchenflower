@@ -18,7 +18,11 @@ class CoreConfigParser():
 		},
 		{
 			'scope': 'debug',
-		    'params_bool': ['web_debug', 'model_debug']
+			'params_bool': ['web_debug', 'model_debug']
+		},
+		{
+			'scope': 'misc',
+		    'params_bool': ['git_revision']
 		}
 	]
 
@@ -87,8 +91,9 @@ class CoreConfigParser():
 
 class core():
 
-	__appname__ = u'Auchenflower Framework'
-	__version__ = u'0.1'
+	__appname__  = u'Auchenflower Framework'
+	__version__  = u'0.1'
+	__revision__ = False
 
 	db = None
 	model = None
@@ -114,7 +119,8 @@ class core():
 
 		self.base_fields = {'host': self.HOST}
 
-		self.__getBuildInfo()
+		if self.conf['misc']['git_revision']:
+			self.__getBuildInfo()
 
 		if 'database' in self.conf and self.conf['database']['connector']:
 			self.__databaseLoad(self.conf['database']['connector'])
