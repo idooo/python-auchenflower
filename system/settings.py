@@ -92,12 +92,16 @@ class CoreConfigParser():
 class core():
 
 	__appname__  = u'Auchenflower Framework'
-	__version__  = u'0.1'
+	__version__  = u'0.5'
 	__revision__ = False
 
 	db = None
 	model = None
 
+	APP_DIR = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/../'
+
+	MODELS_DIR = './models'
+	CONTROLLERS_DIR = './controllers'
 	TEMPLATES_FOLDER = './templates/'
 
 	SERVICE_TEMPLATES_DIR = './service/'
@@ -107,8 +111,6 @@ class core():
 	    'debug': SERVICE_TEMPLATES_DIR+'debug',
 	    'debug_model': SERVICE_TEMPLATES_DIR+'debug_model'
 	}
-
-	APP_DIR = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/../'
 
 	def __init__(self):
 		config_loader = CoreConfigParser()

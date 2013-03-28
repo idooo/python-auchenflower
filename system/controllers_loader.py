@@ -5,22 +5,19 @@ import os, inspect, sys
 
 class controllersLoader():
 
-	CONTROLLERS_DIR = '/controllers'
-
-	def __init__(self):
+	def __init__(self, core):
+		self.core = core
 		self.__loadModules()
-		self.__getAlias()
 
 	def __loadModules(self):
-		modules_folder = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/..'+self.CONTROLLERS_DIR
+		modules_folder = self.core.APP_DIR + self.core.CONTROLLERS_DIR
 
+		self.controllers = {}
 		self.modules = {}
+
 		for item in os.listdir(modules_folder):
 			if item[-2:] == 'py':
 				self.modules.update({item[:-3:]:__import__(item[:-3:])})
-
-	def __getAlias(self):
-		self.controllers = {}
 
 		for module_name in self.modules:
 			try:
@@ -29,6 +26,25 @@ class controllersLoader():
 						controller = class_name()
 						if controller.pages['type'] != controller.pages['urls']:
 							pass
+
+						# Conditional methods
+						if hasattr(controller, 'methods'):
+							deleted_methods = []
+							conditional_methods = {}
+
+							for method_name in controller.methods:
+								tmp = method_name.split('?')
+								if len(tmp) > 1:
+									if not tmp[0] in conditional_methods:
+										conditional_methods.update({tmp[0]: {}})
+
+									conditional_methods[tmp[0]].update({tmp[1]: controller.methods[method_name]})
+									deleted_methods.append(method_name)
+
+							controller.conditional_methods = conditional_methods
+
+							for method_name in deleted_methods:
+								del controller.methods[method_name]
 
 						self.controllers.update({module_name: controller})
 

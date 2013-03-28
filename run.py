@@ -14,7 +14,7 @@ class WebApp():
 
 	exposed = True
 
-	controller = controllersLoader()
+	controller = controllersLoader(core)
 	pages = Set()
 
 	def __init__(self):

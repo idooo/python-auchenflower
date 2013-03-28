@@ -22,6 +22,10 @@ class defaultController(defaultClass):
 	DIR = './'
 	title = 'page_title_name'
 
+	pages = {}
+	methods = {}
+	conditional_methods = {}
+
 	def __init__(self, preload = True):
 		defaultClass.__init__(self)
 		self.sbuilder = site_builder.builder()
@@ -56,18 +60,22 @@ class defaultController(defaultClass):
 
 		def runMethod(params):
 
-			if not hasattr(self, 'methods'):
+			methods = self.methods.copy()
+			if page in self.conditional_methods:
+				methods.update(self.conditional_methods[page])
+
+			if not methods:
 				return False
 
 			for param_name in params:
-				if param_name in self.methods:
-					if isinstance(self.methods[param_name], dict):
-						if params[param_name] in self.methods[param_name]:
-							method_name = self.methods[param_name][params[param_name]]
+				if param_name in methods:
+					if isinstance(methods[param_name], dict):
+						if params[param_name] in methods[param_name]:
+							method_name = methods[param_name][params[param_name]]
 						else:
-							method_name = self.methods[param_name]
+							method_name = methods[param_name]
 					else:
-						method_name = self.methods[param_name]
+						method_name = methods[param_name]
 
 					if isinstance(method_name, str) and hasattr(self, method_name):
 						return getattr(self, method_name)(params)
@@ -118,18 +126,18 @@ class defaultController(defaultClass):
 		params.update({'__page__': page, '__query__': cherrypy.request.query_string})
 
 		if res:
+			if not isinstance(res, dict):
+				return res
+
 			if self.__isAjax() or '__ajax__' in params:
-				if isinstance(res, dict):
-					return toJSON(res)
-				else:
-					return res
+				return toJSON(res)
+
 			else:
-				if isinstance(res, dict):
-					fields.update({'__method__': res})
+				fields.update({'__method__': res})
+
 
 		fields.update(self.__paramsConvert(params))
 
-		# print page
 		return runRule(self.pages['urls'], page)
 
 	def redirect(self, url_or_params, additional = ''):

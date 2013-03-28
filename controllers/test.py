@@ -18,14 +18,21 @@ class miscController(basic_controller.defaultController):
 
 	methods = {
 		'time': 'getTime',
+		'bzz': 'bzzz',
 	    'redirect': 'getRedirect',
 		'string' : {
 			'ya': 'getTestString1',
 	        'no': 'getTestString2'
 		},
 
-	    # @TODO only for /u/normal page method run by 'define'
-	    'normal?define': 'test'
+	    'normal?define': 'getDefine',
+	    'not_normal?papa': 'appapap',
+	    'normal?define2': {
+		    'ye': 'yeeeee',
+	        'no': 'nope'
+	    },
+	    'normal?define3': 'getDefine3'
+
 	}
 
 
@@ -34,6 +41,9 @@ class miscController(basic_controller.defaultController):
 
 	def getTime(self, params):
 		return {'current_time': time()}
+
+	def getDefine(self, params):
+		return {'test_string': 'da da da'}
 
 	def getTestString1(self, params):
 		print {'test_string': 'yaaaarrr!'}

@@ -10,9 +10,7 @@ class DataModel():
 	@staticmethod
 	def loadGlobalModel(core):
 
-		MODELS_DIR = '/models'
-
-		models_folder = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])+'/..'+MODELS_DIR
+		models_folder = core.APP_DIR + core.MODELS_DIR
 
 		modules = {}
 		for item in os.listdir(models_folder):

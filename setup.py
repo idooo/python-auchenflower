@@ -1,7 +1,5 @@
 from setuptools import setup
 
-# @TODO remove setup.py and write script to download requires
-
 setup(
 	name='python-auchenflower',
 	version='0.0.4',
