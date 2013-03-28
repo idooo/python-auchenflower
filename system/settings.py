@@ -6,6 +6,7 @@
 import __main__
 import sys, os, inspect
 import ConfigParser
+import sass_builder
 from models_loader import DataModel
 
 class CoreConfigParser():
@@ -23,6 +24,11 @@ class CoreConfigParser():
 		{
 			'scope': 'misc',
 		    'params_bool': ['git_revision']
+		},
+		{
+			'scope': 'sass',
+		    'params_bool': ['enabled'],
+		    'params_str': ['src_dir', 'output_dir']
 		}
 	]
 
@@ -127,6 +133,9 @@ class core():
 		if 'database' in self.conf and self.conf['database']['connector']:
 			self.__databaseLoad(self.conf['database']['connector'])
 
+		if 'sass' in self.conf and self.conf['sass']['enabled']:
+			self.__sassParse()
+
 		self.__modelLoad()
 
 	def __databaseLoad(self, connector_name):
@@ -154,6 +163,10 @@ class core():
 		result = os.popen('git log | grep "^commit" | wc -l')
 		lines = result.readlines()
 		self.__revision__ = int(lines[0])
+
+	def __sassParse(self):
+		self.css_preprocessor = sass_builder.sassParser(self)
+		self.css_preprocessor.parse()
 
 	def formatError(self, text):
 		length = len(text)

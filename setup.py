@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
 	name='python-auchenflower',
-	version='0.0.4',
+	version='0.5',
 	author='Alex Shteinikov',
 	author_email='alex.shteinikov@gmail.com',
 	url='https://github.com/idooo/python-auchenflower',
@@ -12,5 +12,6 @@ setup(
 	install_requires=[
 		"jinja2 >= 2.6",
 		"cherrypy >= 3.2.2",
+	    "libsass >= 0.2.4"
 		],
 	)
