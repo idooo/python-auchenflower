@@ -1,5 +1,6 @@
-import sass
+from sassutils import builder
 import os
+import shutil
 
 class sassParser():
 
@@ -15,23 +16,32 @@ class sassParser():
 			self.src_dir = core.APP_DIR + core.conf['sass']['src_dir']
 			self.output_dir = core.APP_DIR + core.conf['sass']['output_dir']
 
-	def parse(self):
+	def parseSass(self):
 
-		files = []
+		def clearDir():
+			folder = self.output_dir
+			for the_file in os.listdir(folder):
+				file_path = os.path.join(folder, the_file)
+				try:
+					if os.path.isdir(file_path):
+						shutil.rmtree(file_path)
+					else:
+						os.unlink(file_path)
+				except Exception, e:
+					print e
+
+		print '> SASS/SCSS files compiling...'
+
+		clearDir()
+
 		for item in os.listdir(self.src_dir):
 
-			#if os.path.isdir(self.src_dir+'/'+item):
-			#	print 'DIR',item
+			if os.path.isdir(self.src_dir+'/'+item):
+				os.mkdir(self.output_dir+'/'+item)
+				builder.build_directory(self.src_dir+'/'+item, self.output_dir+'/'+item)
 
-			if item[-4:] == 'scss' or item[-4:] == 'sass':
-				data = {
-					'name': item,
-					'clearname': item[:-5:],
-				}
+		builder.build_directory(self.src_dir, self.output_dir)
 
-				f = open(self.src_dir+'/'+item)
-				text = f.read()
-				print sass.compile(text)
-				f.close()
+		print '> CSS files were created'
 
 

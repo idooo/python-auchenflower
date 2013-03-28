@@ -66,15 +66,20 @@ class CoreConfigParser():
 
 
 			for param_name in available_param_names:
-				try:
+				if 1:
 					if 'params_int' in section and param_name in section['params_int']:
+
 						value = int(self.config.get(section['scope'], param_name))
+					elif 'params_bool' in section and param_name in section['params_bool']:
+						# @TODO not working
+						value = str(value) in ['True', u'true', u'1']
+						#print param_name,'>',value
+
 					else:
 						value = self.__prettyStr(self.config.get(section['scope'], param_name))
-						if 'params_bool' in section and param_name in section['params_bool']:
-							value = bool(value)
-				except:
-					value = False
+
+				#except:
+				#	value = False
 
 				parsed_params.update({param_name: value})
 
@@ -166,7 +171,7 @@ class core():
 
 	def __sassParse(self):
 		self.css_preprocessor = sass_builder.sassParser(self)
-		self.css_preprocessor.parse()
+		self.css_preprocessor.parseSass()
 
 	def formatError(self, text):
 		length = len(text)
