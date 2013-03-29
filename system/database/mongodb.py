@@ -13,7 +13,7 @@ class dbAdapter():
 				settings.conf['database']['port']
 			)
 		except pymongo.errors.AutoReconnect:
-			print settings.formatError('Could not connect to mongo instance -> '+settings.conf['database']['address']+':'+str(settings.conf['database']['port']))
+			print settings.formatError('ERROR! Could not connect to mongo instance -> '+settings.conf['database']['address']+':'+str(settings.conf['database']['port']))
 			exit()
 
 		self.db = self.con[settings.conf['database']['database']]

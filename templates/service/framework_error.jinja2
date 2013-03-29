@@ -1,8 +1,25 @@
-<div style="width: 100%; height: 100%">
+<html>
+	<head>
+		<title>{{ __base__.app_name }}: {{ error_name }}</title>
+		<link rel="stylesheet" href="/css/default.css?{{ __base__.revision }}">
+	</head>
 
-	<div style="width: 600px; height: 300px; margin: auto">
-		<h1>Error: {{ error_name }}</h1>
-		<pre>{{ context }}</pre>
-	</div>
+	<body>
+		<div class="header">
+            {{ __base__.app_name }}
+			<div class="framework">
+				{{ __base__.framework }}
+			</div>
+		</div>
+		<div class="container">
 
-</div>
+			<div class="inside-container">
+				<h1>Error: {{ error_name }}</h1>
+				<pre>{{ context }}</pre>
+			</div>
+
+		</div>
+
+	</body>
+
+</html>

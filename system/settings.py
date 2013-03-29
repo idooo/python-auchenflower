@@ -13,13 +13,17 @@ class CoreConfigParser():
 
 	params = [
 		{
+			'scope': 'global',
+	        'params_bool': ['request.show_tracebacks']
+		},
+		{
 			'scope': 'database',
 			'params_int': ['port'],
 			'params_str': ['address', 'user', 'pass', 'database', 'connector'],
 		},
 		{
 			'scope': 'debug',
-			'params_bool': ['web_debug', 'model_debug']
+			'params_bool': ['web_debug', 'model_debug', 'framework_errors']
 		},
 		{
 			'scope': 'misc',
@@ -64,22 +68,24 @@ class CoreConfigParser():
 				if group_name in section:
 					available_param_names += section[group_name]
 
-
 			for param_name in available_param_names:
-				if 1:
-					if 'params_int' in section and param_name in section['params_int']:
+				try:
+					raw_value = self.config.get(section['scope'], param_name)
+				except ConfigParser.NoOptionError:
+					raw_value = 0
 
-						value = int(self.config.get(section['scope'], param_name))
-					elif 'params_bool' in section and param_name in section['params_bool']:
-						# @TODO not working
-						value = str(value) in ['True', u'true', u'1']
-						#print param_name,'>',value
+				if 'params_int' in section and param_name in section['params_int']:
+					try:
+						value = int(raw_value)
+					except ValueError:
+						value = 0
+						print '> WARNING! Wrong config int parameter value:', param_name, '=', raw_value
 
-					else:
-						value = self.__prettyStr(self.config.get(section['scope'], param_name))
+				elif 'params_bool' in section and param_name in section['params_bool']:
+					value = unicode(raw_value) in ['True', 'true', '1']
 
-				#except:
-				#	value = False
+				else:
+					value = self.__prettyStr(self.config.get(section['scope'], param_name))
 
 				parsed_params.update({param_name: value})
 
@@ -94,7 +100,7 @@ class CoreConfigParser():
 			})
 
 		except Exception, e:
-			print '>>> Error! Unable to load config data'
+			print '> ERROR! Unable to load config data:'
 			print str(e)
 			exit()
 
@@ -105,6 +111,11 @@ class core():
 	__appname__  = u'Auchenflower Framework'
 	__version__  = u'0.5'
 	__revision__ = False
+
+	__framework__ = {
+		'name': u'Auchenflower Framework',
+	    'version': u'0.5'
+	}
 
 	db = None
 	model = None
@@ -153,12 +164,13 @@ class core():
 				self.database_connector = __import__(item[:-3:])
 				break
 		else:
-			print 'No module found'
+			print 'ERROR! Database module not found: '+connector_name
+			exit()
 
 		try:
 			self.db = self.database_connector.dbAdapter(self)
 		except Exception, e:
-			print self.formatError('Database load error: '+str(e))
+			print 'ERROR! Database load error: '+str(e)
 			exit()
 
 	def __modelLoad(self):
@@ -172,8 +184,3 @@ class core():
 	def __sassParse(self):
 		self.css_preprocessor = sass_builder.sassParser(self)
 		self.css_preprocessor.parseSass()
-
-	def formatError(self, text):
-		length = len(text)
-		decor = '# '+'-'*(length+2)+' #'
-		return decor+'\n#  '+text+'  #\n'+decor

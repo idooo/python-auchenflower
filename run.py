@@ -17,6 +17,19 @@ class WebApp():
 	controller = controllersLoader(core)
 	pages = Set()
 
+	cherrypy.config.update({
+		'tools.staticdir.root': core.APP_DIR,
+		'tools.encode.encoding': 'utf8'
+	})
+
+	@staticmethod
+	def welcomeString():
+		welcome_string = '#  ' + core.__appname__ + ', version: ' + str(core.__version__)
+		if core.__revision__:
+			welcome_string += ', revision: '+ str(core.__revision__)
+
+		return welcome_string
+
 	def __init__(self):
 		self.page_runners = {}
 
@@ -63,12 +76,8 @@ class WebApp():
 
 if __name__ == '__main__':
 
-	welcome_string = '#  ' + core.__appname__ + ', version: ' + str(core.__version__)
-	if core.__revision__:
-		welcome_string += ', revision: '+ str(core.__revision__)
-
 	print '# ------------------------------------------------------------- #'
-	print welcome_string
+	print WebApp.welcomeString()
 	print '# ------------------------------------------------------------- #'
 
 	builder = site_builder.builder(core)

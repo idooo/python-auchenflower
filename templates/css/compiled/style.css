@@ -1,3 +1,5 @@
+/* Main vars */
+/*  -------  */
 /* Fonts */
 /* For example load PT Serif
 
@@ -14,3 +16,6 @@
 */
 h3 {
   color: black; }
+
+b {
+  background: no-repeat; }

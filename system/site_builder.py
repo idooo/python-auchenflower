@@ -30,10 +30,16 @@ class builder():
 		return self.loadTemplate('error.jinja2', fields)
 
 	def throwFrameworkError(self, name, context = {}):
-		data = {'fields': {
-			'error_name': name,
-		    'context': context
-		}}
+		data = {
+			'fields': {
+				'error_name': name,
+			    'context': context
+			}
+		}
+
+		if not self.core.conf['debug']['framework_errors']:
+			raise Exception
+
 		return self.loadTemplate(self.core.SERVICE_TEMPLATES['framework_error']+'.jinja2', data)
 
 	def httpRedirect(self, url):
@@ -43,14 +49,18 @@ class builder():
 
 		if not 'current_page' in data['fields']:
 			data['fields'].update({
-				'current_page': filename,
-				'version': self.core.__version__,
-				'address': cherrypy.request.path_info[1:],
-				'build': self.core.__revision__,
-				'conf_name': self.core.conf['conf_name']
+				'__base__': {
+					'current_page': filename,
+				    'app_name': self.core.__appname__,
+				    'framework': self.core.__framework__['name']+', version: '+self.core.__framework__['version'],
+					'version': self.core.__version__,
+					'address': cherrypy.request.path_info[1:],
+					'revision': self.core.__revision__,
+					'conf_name': self.core.conf['conf_name']
+				}
 			})
 
-		data['fields'].update(self.core.base_fields)
+		data['fields']['__base__'].update(self.core.base_fields)
 
 		try:
 			template = self.env.get_template(filename)

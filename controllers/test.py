@@ -69,6 +69,7 @@ class miscController(basic_controller.defaultController):
 
 	def printNormal(self, data):
 		data['fields'].update({'page_name': 'u -> normal'})
+		raise NameError
 		return self.printTemplate('test', data)
 
 	def printModelData(self, data):
