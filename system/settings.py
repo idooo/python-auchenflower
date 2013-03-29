@@ -73,6 +73,8 @@ class CoreConfigParser():
 					raw_value = self.config.get(section['scope'], param_name)
 				except ConfigParser.NoOptionError:
 					raw_value = 0
+				except ConfigParser.NoSectionError:
+					raw_value = 0
 
 				if 'params_int' in section and param_name in section['params_int']:
 					try:
