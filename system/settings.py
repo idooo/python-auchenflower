@@ -125,6 +125,7 @@ class core():
 	MODELS_DIR = './models'
 	CONTROLLERS_DIR = './controllers'
 	TEMPLATES_FOLDER = './templates/'
+	ASSETS_FOLDER = './assets'
 
 	SERVICE_TEMPLATES_DIR = './service/'
 	SERVICE_TEMPLATES = {
