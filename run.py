@@ -28,7 +28,12 @@ class WebApp():
 		if core.__revision__:
 			welcome_string += ', revision: '+ str(core.__revision__)
 
-		return welcome_string
+		delimeter = '# '+('-')*(len(welcome_string)-1)+' #\n'
+
+		if core.DEBUG_MODE:
+			welcome_string += '\n#  <<< DEBUG MODE >>>'
+
+		return '\n'+delimeter+welcome_string+'\n'+delimeter
 
 	def __init__(self):
 		self.page_runners = {}
@@ -76,9 +81,7 @@ class WebApp():
 
 if __name__ == '__main__':
 
-	print '# ------------------------------------------------------------- #'
 	print WebApp.welcomeString()
-	print '# ------------------------------------------------------------- #'
 
 	builder = site_builder.builder(core)
 	cherrypy.quickstart(WebApp(), config=core.conf_name)

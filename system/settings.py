@@ -109,12 +109,12 @@ class CoreConfigParser():
 class core():
 
 	__appname__  = u'Auchenflower Framework'
-	__version__  = u'0.5'
+	__version__  = u'0.9'
 	__revision__ = False
 
 	__framework__ = {
 		'name': u'Auchenflower Framework',
-	    'version': u'0.5'
+	    'version': u'0.9'
 	}
 
 	db = None
@@ -154,6 +154,16 @@ class core():
 			self.__sassParse()
 
 		self.__modelLoad()
+
+		# check debug mode
+		is_debug = False
+		for debug_var in self.conf['debug']:
+			is_debug = is_debug or self.conf['debug'][debug_var]
+
+		is_debug = is_debug or self.conf['global']['request.show_tracebacks']
+
+		self.DEBUG_MODE = is_debug
+
 
 	def __databaseLoad(self, connector_name):
 
