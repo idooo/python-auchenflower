@@ -31,7 +31,7 @@ Install
 2) Install requirements
 
 (Auchenflower framework requires CherryPy, jinja2, libsass and pymongo
-(optional)), you can easly install all of these by using pip. Execute this in
+(optional)), you can easly install all of these by using pip. Execute this command in
 project directory:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,8 +66,8 @@ http://127.0.0.1:8085
 Optimal configuration
 ---------------------
 
-The optimal configuration is using nginx web-server (or something like this) in
-the front of your website to deliever static content. In this case you should:
+The optimal thing is to use nginx web-server (or something like this) in
+the front of your website to deliver static content. In this case you should:
 
 
 
@@ -84,7 +84,7 @@ site.host = "my-server.com"
 
 
 
-2) Configure your nginx (for example) webserver as reverse proxy:
+2) Configure your nginx (for example) webserver as a reverse proxy:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # something like this in /etc/nginx/sites-enabled/default

@@ -1,22 +1,29 @@
 ﻿# -*- coding: UTF-8 -*-
 
+"""
+	Server runner class
+"""
+
 import __init__
 import settings
 
+# We need to get and init core settings
+# before we start import other modules
 core = settings.core()
 
 import cherrypy
 import site_builder
-from sets import Set
 from controllers_loader import controllersLoader
 
 class WebApp():
 
 	exposed = True
 
+	# Load all controllers from ./controllers/
 	controller = controllersLoader(core)
-	pages = Set()
+	pages = set()
 
+	# Set CherryPy static dir root = working dir
 	cherrypy.config.update({
 		'tools.staticdir.root': core.APP_DIR,
 		'tools.encode.encoding': 'utf8'
@@ -24,6 +31,8 @@ class WebApp():
 
 	@staticmethod
 	def welcomeString():
+		""" Display pretty formatted loader welcome message """
+
 		welcome_string = '#  ' + core.__appname__ + ', version: ' + str(core.__version__)
 		if core.__revision__:
 			welcome_string += ', revision: '+ str(core.__revision__)
@@ -38,8 +47,8 @@ class WebApp():
 	def __init__(self):
 		self.page_runners = {}
 
+		# Create dict() from the list of controllers to make routes search faster
 		for module_name in self.controller.controllers:
-
 			for type_name in self.controller.controllers[module_name].pages['type']:
 				new_runner = {
 					'class': self.controller.controllers[module_name],
@@ -53,7 +62,11 @@ class WebApp():
 					self.page_runners.update({type_name: [new_runner]})
 
 	def __load(self, page, args, params = {}):
-
+		"""
+			Searches for controller that can open @page route
+			printPage method of this controller will be executed
+			with @args and @params
+		"""
 		for variant in self.page_runners[page]:
 
 			if len(args):
@@ -63,12 +76,23 @@ class WebApp():
 
 			return self.controller.controllers[variant['name']].printPage(page_name, args, params)
 
+		# If we didn't find controller for this route
+		# we will throw web error
 		return builder.throwWebError(params=params)
 
 	def index(self, *args, **kwargs):
+		"""
+			This method executing by load empty address (route)
+			and always bind to 'index' page type
+		"""
 		return self.__load('index', list(args), kwargs)
 
 	def default(self, page, *args, **kwargs):
+		"""
+			This is handler for all addresses (routes)
+			After execution we will run __load to find
+			which of controllers we will use for this page
+		"""
 		args = list(args)
 		if not page in self.page_runners:
 			args.insert(0, page)
