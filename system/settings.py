@@ -68,28 +68,45 @@ class CoreConfigParser():
 				if group_name in section:
 					available_param_names += section[group_name]
 
-			for param_name in available_param_names:
-				try:
-					raw_value = self.config.get(section['scope'], param_name)
-				except ConfigParser.NoOptionError:
-					raw_value = 0
-				except ConfigParser.NoSectionError:
-					raw_value = 0
+			section_exists = True
+			try:
+				self.config.items(section['scope'])
+			except ConfigParser.NoSectionError:
+				section_exists = False
 
-				if 'params_int' in section and param_name in section['params_int']:
+			if section_exists:
+				for param_name in available_param_names:
+
 					try:
-						value = int(raw_value)
-					except ValueError:
+						raw_value = self.config.get(section['scope'], param_name)
+					except ConfigParser.NoOptionError:
+						raw_value = 0
+
+					if 'params_int' in section and param_name in section['params_int']:
+						try:
+							value = int(raw_value)
+						except ValueError:
+							value = 0
+							print '> WARNING! Wrong config int parameter value:', param_name, '=', raw_value
+
+					elif 'params_bool' in section and param_name in section['params_bool']:
+						value = unicode(raw_value) in ['True', 'true', '1']
+
+					else:
+						value = self.__prettyStr(self.config.get(section['scope'], param_name))
+
+					parsed_params.update({param_name: value})
+
+			else:
+				for param_name in available_param_names:
+					if 'params_int' in section and param_name in section['params_int']:
 						value = 0
-						print '> WARNING! Wrong config int parameter value:', param_name, '=', raw_value
+					elif 'params_bool' in section and param_name in section['params_bool']:
+						value = False
+					else:
+						value = ''
 
-				elif 'params_bool' in section and param_name in section['params_bool']:
-					value = unicode(raw_value) in ['True', 'true', '1']
-
-				else:
-					value = self.__prettyStr(self.config.get(section['scope'], param_name))
-
-				parsed_params.update({param_name: value})
+					parsed_params.update({param_name: value})
 
 			fields.update({section['scope']: parsed_params})
 
@@ -111,12 +128,12 @@ class CoreConfigParser():
 class core():
 
 	__appname__  = u'Auchenflower Framework'
-	__version__  = u'0.9'
+	__version__  = u'0.95'
 	__revision__ = False
 
 	__framework__ = {
 		'name': u'Auchenflower Framework',
-	    'version': u'0.9'
+	    'version': u'0.95'
 	}
 
 	db = None
@@ -132,9 +149,10 @@ class core():
 	SERVICE_TEMPLATES_DIR = './service/'
 	SERVICE_TEMPLATES = {
 		'default': SERVICE_TEMPLATES_DIR+'default',
-	    'framework_error': SERVICE_TEMPLATES_DIR+'framework_error',
+	    'framework_error': SERVICE_TEMPLATES_DIR+'_framework_error',
 	    'debug': SERVICE_TEMPLATES_DIR+'debug',
-	    'debug_model': SERVICE_TEMPLATES_DIR+'debug_model'
+	    'debug_model': SERVICE_TEMPLATES_DIR+'debug_model',
+        'error': SERVICE_TEMPLATES_DIR+'error',
 	}
 
 	def __init__(self):

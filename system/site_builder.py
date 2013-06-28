@@ -25,9 +25,11 @@ class builder():
 		if error_code == 404:
 			error = 'Page Not Found'
 
-		fields = {'error': error, 'code':error_code }
+		data = {
+			'fields': {'error': error, 'code':error_code }
+		}
 
-		return self.loadTemplate('error.jinja2', fields)
+		return self.loadTemplate(self.core.SERVICE_TEMPLATES['error']+'.jinja2', data)
 
 	def throwFrameworkError(self, name, context = {}):
 		data = {
@@ -38,7 +40,7 @@ class builder():
 		}
 
 		if not self.core.conf['debug']['framework_errors']:
-			raise Exception
+			return self.throwWebError()
 
 		return self.loadTemplate(self.core.SERVICE_TEMPLATES['framework_error']+'.jinja2', data)
 

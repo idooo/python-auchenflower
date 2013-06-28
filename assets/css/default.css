@@ -2,12 +2,12 @@
     Styles for default errors and debug output
 */
 
-body.framework-error {
+body.au-framework-error {
     padding: 0;
     margin: 0;
 }
 
-.header {
+.au-header {
     font-family: Helvetica, Arial, sans-serif;
     background-color: #999;
     color: white;
@@ -15,29 +15,29 @@ body.framework-error {
     font-size: 22px;
 }
 
-    .header .framework {
+    .au-header .au-framework {
         font-size: 12px;
         color: #ddd;
     }
 
-.container {
+.au-container {
     font-family: Helvetica, Arial, sans-serif;
 }
 
-    .inside-container {
+    .au-inside-container {
         padding: 16px 22px;
     }
 
-        .inside-container h1 {
+        .au-inside-container h1 {
             font-size: 18px;
         }
 
-.debug-output {
+.au-debug-output {
     background-color: #eee;
     box-shadow: inset 0 6px 15px -10px rgba(0,0,0,0.5);
 }
 
-    .debug-output h2 {
+    .au-debug-output h2 {
         font-family: Helvetica, Arial, sans-serif;
         font-size: 14px;
         color: white;
@@ -45,10 +45,10 @@ body.framework-error {
         background-color: #992222;
     }
 
-    .debug-output pre {
+    .au-debug-output pre {
         padding: 0 15px 18px;
     }
 
-    .debug-output.debug-model h2 {
+    .au-debug-output.au-debug-model h2 {
         background-color: #666;
     }
