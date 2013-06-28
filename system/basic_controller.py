@@ -17,6 +17,8 @@ class defaultClass:
 		except:
 			self.core = __main__.core
 
+		self.model = self.core.model
+
 class defaultController(defaultClass):
 
 	DIR = './'

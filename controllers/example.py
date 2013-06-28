@@ -74,7 +74,7 @@ class exampleController(basic_controller.defaultController):
 	# Returns current time in 'current_time' field
 	# to demonstrate how methods are working 
 	def getTime(self, params):
-		return {'current_time': time()}
+		return {'current_time': 'today'}
 
 	# Print string to console 
 	def testSayYes(self, params):
@@ -99,9 +99,15 @@ class exampleController(basic_controller.defaultController):
    # if controller's route path not exists
    # 
 	def printDefault(self, data):  
-		
-		# Define example variable 'page_name' 
-		data['fields'].update({'page_name': 'u -> default'})
+
+		# Model example
+		people = self.model.Example.People.getPeople()
+
+		# Define example variable 'page_name'
+		data['fields'].update({
+			'page_name': 'u -> default',
+		    'people': people
+		})
 		
 		# Print template
 		return self.printTemplate('test', data)

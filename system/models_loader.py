@@ -5,6 +5,18 @@ import __init__
 import __main__
 import os, inspect, sys
 
+class ModelObject(dict):
+
+	def __getattr__(self, name):
+		try:
+			return self[name]
+		except KeyError as e:
+			raise AttributeError(e)
+
+	def __setattr__(self, name, value):
+		self[name] = value
+
+
 class DataModel():
 
 	@staticmethod
@@ -17,17 +29,17 @@ class DataModel():
 			if item[-2:] == 'py':
 				modules.update({item[:-3:]:__import__(item[:-3:])})
 
-		global_model = {}
+		global_model = ModelObject()
 
 		for module_name in modules:
-			clear_module_name = module_name.replace('model_', '')
+			clear_module_name = module_name.replace('model_', '').capitalize()
 
 			for name, class_name in inspect.getmembers(sys.modules[module_name]):
 				if inspect.isclass(class_name):
 					if not clear_module_name in global_model:
-						global_model.update({clear_module_name: {}})
+						setattr(global_model, clear_module_name, ModelObject())
 
-					global_model[clear_module_name].update({name: class_name(core)})
+					setattr(getattr(global_model, clear_module_name), name, class_name(core))
 
 		return global_model
 
