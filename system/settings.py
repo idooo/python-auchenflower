@@ -128,12 +128,12 @@ class CoreConfigParser():
 class core():
 
 	__appname__  = u'Auchenflower Framework'
-	__version__  = u'0.95'
+	__version__  = u'1.0'
 	__revision__ = False
 
 	__framework__ = {
 		'name': u'Auchenflower Framework',
-	    'version': u'0.95'
+	    'version': u'1.0'
 	}
 
 	db = None
