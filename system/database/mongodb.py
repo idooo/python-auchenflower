@@ -66,6 +66,10 @@ class dbAdapter():
 
 	def update(self, collection_name, search, update, insert = False, multi = False):
 		items = self.db[collection_name]
+
+		if multi:
+			return items.update(search, update, multi=True)
+
 		return items.update(search, update, insert, multi)
 
 	def getLastError(self):
@@ -75,8 +79,8 @@ class dbAdapter():
 		items = self.db[collection_name]
 		return items.find(search).count()
 
-	def find(self, collection_name, search = {}, fields = {}):
-		output = self.getu(collection_name, search = search, fields = fields, limit=1)
+	def findOne(self, collection_name, search = {}, fields = {}):
+		output = self.get(collection_name, search = search, fields = fields, limit=1)
 		if output:
 			return output[0]
 		else:
