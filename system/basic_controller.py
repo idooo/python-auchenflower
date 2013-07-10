@@ -112,7 +112,12 @@ class defaultController(defaultClass):
 			}
 
 			if hasattr(self, rule):
-				return getattr(self, rule)(data)
+				args = {'data': data}
+				additional_fields = set(inspect.getargspec(getattr(self, rule))[0]) - {'self', 'data'}
+				for field_name in additional_fields:
+					args.update({field_name: data[field_name]})
+
+				return getattr(self, rule)(**args)
 			else:
 				return self.sbuilder.throwFrameworkError(
 					name='response page not defined',

@@ -128,12 +128,12 @@ class CoreConfigParser():
 class core():
 
 	__appname__  = u'Auchenflower Framework'
-	__version__  = u'1.0'
+	__version__  = u'1.0.2'
 	__revision__ = False
 
 	__framework__ = {
 		'name': u'Auchenflower Framework',
-	    'version': u'1.0'
+	    'version': u'1.0.2'
 	}
 
 	db = None
@@ -183,7 +183,6 @@ class core():
 		is_debug = is_debug or self.conf['global']['request.show_tracebacks']
 
 		self.DEBUG_MODE = is_debug
-
 
 	def __databaseLoad(self, connector_name):
 
